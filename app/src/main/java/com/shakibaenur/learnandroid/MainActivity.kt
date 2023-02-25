@@ -38,6 +38,27 @@ class MainActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
+    // checks the camera permission
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults:
+        IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            // If all permissions granted , then start Camera
+            if (allPermissionsGranted()) {
+                startCamera()
+            } else {
+                // If permissions are not granted,
+                // present a toast to notify the user that
+                // the permissions were not granted.
+                Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
+        }
+    }
+
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -74,24 +95,5 @@ class MainActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    // checks the camera permission
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            // If all permissions granted , then start Camera
-            if (allPermissionsGranted()) {
-                startCamera()
-            } else {
-                // If permissions are not granted,
-                // present a toast to notify the user that
-                // the permissions were not granted.
-                Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT)
-                    .show()
-                finish()
-            }
-        }
-    }
+
 }
